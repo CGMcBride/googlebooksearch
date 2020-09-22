@@ -35,6 +35,24 @@ export default class index extends Component {
 		// console.log(value);
 		this.searchBook(this.state.search);
 	};
+	newBook = (book) => {
+		return {
+			_id: book.id,
+			title: book.volumeInfo.title,
+			authors: book.volumeInfo.authors,
+			description: book.volumeInfo.description,
+			image: book.volumeInfo.imageLinks.thumbnail,
+			link: book.volumeInfo.previewLink,
+		};
+	};
+
+	saveBook = (book) => {
+		let bookData = this.newBook(book);
+		console.log(bookData);
+		API.saveBook(bookData).then(() => {
+			console.log(book);
+		});
+	};
 	render() {
 		return (
 			<div>
@@ -69,13 +87,26 @@ export default class index extends Component {
 						(book) => (
 							<div className="p-3 my-5 border border-dark" key={book.id}>
 								<h3>{book.volumeInfo.title}</h3>
-								<h6>{book.volumeInfo.subtitle}</h6>
+								<h6>Written by {book.volumeInfo.authors}</h6>
 								<div className="row">
 									<div className="col-md-3">
 										<img src={book.volumeInfo.imageLinks.thumbnail} />
 									</div>
 									<div className="col-md-8">{book.volumeInfo.description}</div>
 								</div>
+								<a
+									href={book.volumeInfo.previewLink}
+									target="_blank"
+									className="btn btn-success"
+								>
+									View
+								</a>
+								<span
+									onClick={() => this.saveBook(book)}
+									className="btn btn-info ml-2"
+								>
+									Save
+								</span>
 							</div>
 						)
 						// console.log(book)
